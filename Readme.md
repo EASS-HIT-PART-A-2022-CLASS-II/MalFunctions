@@ -6,3 +6,4 @@ to run the project use  "docker-compose up"
 
 ![Screenshot](schema.PNG)
 
+![alt text](https://i.ibb.co/bJfnKc1/schema.png)
