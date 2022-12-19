@@ -6,5 +6,5 @@ app = FastAPI()
 
 @app.get("/getFrom8080")
 def get_root():
-    x = requests.get('http://localhost:8080/hello')
-    return x
+    x = requests.get('http://localhost:8080/test')
+    return x.text

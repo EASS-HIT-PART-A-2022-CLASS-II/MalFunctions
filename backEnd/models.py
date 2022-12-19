@@ -6,7 +6,9 @@ class MalFunctionDto(BaseModel):
     description: str
     status: str
 
-       
-class Number(BaseModel):
-    id: int        
+    def __init__(self,id_int,date_int,description_int,status_int):
+        super().__init__(id=id_int,date=date_int,description=description_int,status=status_int)
+
+
+
     
