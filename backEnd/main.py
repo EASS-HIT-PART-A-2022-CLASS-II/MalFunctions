@@ -2,10 +2,21 @@ from fastapi import FastAPI
 from models import *
 import os, sys
 import requests
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 
-#firstMalFunction = MalFunctionDto(id=1,date="20/12/22",description="fix toilet",status="completed")
-#secondMalFunction = MalFunctionDto(id=2,date="22/12/22",description="fix main door", status="in progress")
+origins = [
+    "http://localhost:8081",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 malfunctions  = []
 

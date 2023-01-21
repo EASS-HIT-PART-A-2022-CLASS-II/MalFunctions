@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "6537a6f8-ab88-49db-bc9c-9982dddab2d1": {
+      "ProjectGuid": "6537a6f8-ab88-49db-bc9c-9982dddab2d1",
+      "DisplayName": "frontend",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

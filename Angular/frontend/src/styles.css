@@ -1,0 +1,84 @@
+/* You can add global styles to this file, and also import other style files */
+.dx-header-row {
+  margin-right: 3px;
+  color: black;
+  font-weight: bold;
+}
+
+.dx-datagrid-borders, .dx-toolbar {
+  background-color: #7d7d7d;
+}
+
+  .dx-datagrid-borders .dx-datagrid-rowsview,
+  .dx-datagrid-headers + .dx-datagrid-rowsview,
+  .dx-datagrid-rowsview.dx-datagrid-after-headers {
+    border-top: 1px solid #7d7d7d;
+  }
+
+  .dx-datagrid-borders > .dx-datagrid-rowsview,
+  .dx-datagrid-borders > .dx-datagrid-total-footer {
+    border-bottom: 1px solid #7d7d7d;
+  }
+
+  .dx-datagrid-borders > .dx-datagrid-headers,
+  .dx-datagrid-borders > .dx-datagrid-rowsview,
+  .dx-datagrid-borders > .dx-datagrid-total-footer {
+    border-left: 1px solid #7d7d7d;
+    border-right: 1px solid #7d7d7d;
+  }
+.dx-datagrid .dx-column-lines > td {
+  border-left: 1px solid #7d7d7d;
+  border-right: 1px solid #7d7d7d;
+}
+.dx-datagrid-headers .dx-datagrid-table .dx-row > td {
+  border-bottom: 1px solid #7d7d7d;
+}
+.dx-datagrid-borders > .dx-datagrid-filter-panel,
+.dx-datagrid-borders > .dx-datagrid-headers {
+  border-top: 1px solid #7d7d7d;
+}
+
+
+.dx-texteditor.dx-editor-outlined {
+  background: #cacbca;
+}
+
+.dx-button-mode-contained {
+  background-color: #cacbca;
+  color: black;
+}
+.dx-datagrid .dx-datagrid-rowsview .dx-datagrid-edit-form {
+  background-color: #7d7d7d;
+}
+
+.dx-selectbox-popup-wrapper .dx-list {
+  background-color: #cacbca;
+  color:black
+}
+.dx-popup-wrapper > .dx-overlay-content {
+  background: #cacbca;
+  -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  border-radius: 6px;
+}
+.dx-calendar {
+  width: 282px;
+  min-width: 282px;
+  height: 268.6px;
+  min-height: 268.6px;
+  background-color: #cacbca;
+  -webkit-tap-highlight-color: transparent;
+  outline: 0;
+  border: 1px solid transparent;
+}
+
+.dx-dropdowneditor.dx-state-active .dx-dropdowneditor-icon,
+.dx-dropdowneditor.dx-state-hover:not(.dx-custom-button-hovered) .dx-dropdowneditor-icon {
+  background-color: #8b8c8c;
+  border-color: transparent;
+}
+
+.dx-datagrid-rowsview .dx-row.dx-edit-row > td {
+  border-top: 2px solid green;
+  border-bottom: 2px solid green;
+}

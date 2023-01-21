@@ -6,14 +6,22 @@ services:
     image: mysql
     container_name: mysql
     environment:
-       MYSQL_ROOT_PASSWORD: 1542
+      MYSQL_ROOT_PASSWORD: 1542
+      MYSQL_DATABASE: sys
+      MYSQL_USER: root
     ports:
       - 3305:3306
   database:
-    image: database
-    container_name: db_backend
+    image: dbservice
+    container_name: dbservice
     ports:
       - 8080:80  
+
+  front:
+    image: frontend
+    container_name: frontend
+    ports:
+      - 8081:80 
 
 
 

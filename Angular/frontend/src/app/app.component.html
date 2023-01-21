@@ -1,0 +1,68 @@
+<div *ngIf="newMalList" class="container">
+  <h1>New Malfunctions</h1>
+  <dx-data-grid #gridContainer
+                id="gridContainer"
+                [dataSource]="newMalList"
+                [remoteOperations]="false"
+                [allowColumnReordering]="true"
+                [showBorders]="true"
+                (onInitNewRow)="insertRow($event)"
+                (onRowUpdated)="RowUpdated($event)"
+                (onRowPrepared)="onRowPrepared($event)"
+                (onRowInserted)="onRowInserted($event)"
+                (onRowRemoved)="onRowRemoved($event)">
+
+    <dxi-column dataField="description"></dxi-column>
+    <dxi-column dataField="creator" caption="Created by"></dxi-column>
+    <dxi-column dataField="date" dataType="date" format="dd/MM/yyyy"></dxi-column>
+    <dxi-column dataField="status">
+      <dxo-lookup [dataSource]="statusTypes" valueExpr="id" displayExpr="status">
+      </dxo-lookup>
+
+    </dxi-column>
+
+
+
+    <dxo-editing [allowUpdating]="true"
+                 [allowAdding]="true"
+                 [allowDeleting]="true"
+                 mode="form">
+    </dxo-editing>
+
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-paging [pageSize]="5"></dxo-paging>
+    <dxo-search-panel [visible]="true"
+                      [width]="240"
+                      placeholder=""></dxo-search-panel>
+
+  </dx-data-grid>
+
+  <h1>Completed Malfunctions</h1>
+  <dx-data-grid id="gridContainer"
+                [dataSource]="completed"
+                [remoteOperations]="false"
+                [allowColumnReordering]="true"
+                [showBorders]="true"
+                (onRowPrepared)="onRowPrepared($event)">
+
+    <dxi-column dataField="description"></dxi-column>
+    <dxi-column dataField="creator" caption="Created by"></dxi-column>
+    <dxi-column dataField="date" dataType="date"></dxi-column>
+    <dxi-column dataField="status">
+      <dxo-lookup [dataSource]="statusTypes" valueExpr="id" displayExpr="status">
+      </dxo-lookup>
+    </dxi-column>
+
+
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-paging [pageSize]="5"></dxo-paging>
+    <dxo-search-panel [visible]="true"
+                      [width]="240"
+                      placeholder=""></dxo-search-panel>
+
+  </dx-data-grid>
+  <dx-button (click)="GetMals()">Click me</dx-button>
+</div>
+
+
+
