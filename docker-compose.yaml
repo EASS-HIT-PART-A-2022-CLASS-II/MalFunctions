@@ -2,27 +2,30 @@
 
 version: "3.9"
 services:
-  mysql:
+  mysql_service:
     image: mysql
-    container_name: mysql
+    container_name: mysql_container
     environment:
       MYSQL_ROOT_PASSWORD: 1542
-      MYSQL_DATABASE: sys
-      MYSQL_USER: root
     ports:
       - 3305:3306
-  database:
+  database_service:
     image: dbservice
-    container_name: dbservice
+    container_name: db_container
     ports:
       - 8080:80  
 
-  front:
+  front_service:
     image: frontend
-    container_name: frontend
+    container_name: frontend_container
     ports:
       - 8081:80 
 
+  backend_service:
+    image: backend
+    container_name: backend_container
+    ports:
+      - 8083:80 
 
 
 

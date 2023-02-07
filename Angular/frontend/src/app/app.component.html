@@ -12,10 +12,17 @@
                 (onRowInserted)="onRowInserted($event)"
                 (onRowRemoved)="onRowRemoved($event)">
 
-    <dxi-column dataField="description"></dxi-column>
-    <dxi-column dataField="creator" caption="Created by"></dxi-column>
-    <dxi-column dataField="date" dataType="date" format="dd/MM/yyyy"></dxi-column>
+    <dxi-column dataField="description">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="creator" caption="Created by">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="date" dataType="datetime">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
     <dxi-column dataField="status">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
       <dxo-lookup [dataSource]="statusTypes" valueExpr="id" displayExpr="status">
       </dxo-lookup>
 
@@ -47,7 +54,7 @@
 
     <dxi-column dataField="description"></dxi-column>
     <dxi-column dataField="creator" caption="Created by"></dxi-column>
-    <dxi-column dataField="date" dataType="date"></dxi-column>
+    <dxi-column dataField="date" dataType="datetime"></dxi-column>
     <dxi-column dataField="status">
       <dxo-lookup [dataSource]="statusTypes" valueExpr="id" displayExpr="status">
       </dxo-lookup>
@@ -61,7 +68,6 @@
                       placeholder=""></dxo-search-panel>
 
   </dx-data-grid>
-  <dx-button (click)="GetMals()">Click me</dx-button>
 </div>
 
 

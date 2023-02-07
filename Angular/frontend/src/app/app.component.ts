@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
+import { flatMap, map } from 'rxjs/operators';
 
 
 @Component({
@@ -14,82 +15,89 @@ export class AppComponent {
 
   @ViewChild('gridContainer', { static: false }) dataGrid!: DxDataGridComponent;
 
-  constructor(
-    private http: HttpClient,
+  constructor(private http: HttpClient) { }
 
-  ) { }
+  title = 'MalFunction';
 
-  newMalList: any;
+  statusTypes = [
+    { id: 1, status: "Pending", color: "#bee0ec" },
+    { id: 2, status: "In Progress", color: "orange" },
+    { id: 3, status: "Completed", color: "#aee5a8" },
+  ]
+
+  newMalList: any = [];
+  completed: any = []
 
   ngOnInit() {
-    this.http.get("http://localhost:8080/check").subscribe(res => {
-
-      console.log("result from check:", res);
+    this.http.get("http://localhost:8083/check").subscribe(res => {
+      //console.log("result from check:", res);
       if (res == "exists" || res == "created") {
         notify("Database approved, ready for work", 'success', 3000);
-        this.http.get("http://localhost:8080/getList").subscribe(res => {
-          console.log("Result: ", res);
-          this.newMalList = res;
-        }, err => {
-          notify("Error, cannot get malfunction list", 'success', 3000);
-        });
       }
-
-
+      this.getData();
     }, err => {
       notify("Error, cannot approve database", 'error', 3000);
     });
   }
 
-
-  title = 'frontend';
-
-  completed:any = []
-  statusTypes = [
-    { id: 1, status: "Pending", color:"#bee0ec"},
-    { id: 2, status: "In Progress", color: "orange"},
-    { id: 3, status: "Completed", color: "#aee5a8" },
-  ]
-  new = [
-    { id: 1, description:"fix toilet", creator: "roman", date: Date.now(), status: 1 },
-    { id: 2, description: "fix bathroom", creator: "dani", date: Date.now(), status: 1 },
-    { id: 3, description: "fix toilet", creator: "roman", date: Date.now(), status: 2 },
-    { id: 4, description: "fix toilet", creator: "roman", date: Date.now(), status: 1 },
-    { id: 5, description: "fix toilet", creator: "roman", date: Date.now(), status: 1 },
-    { id: 6, description: "fix toilet", creator: "roman", date: Date.now(), status: 2 },
-    { id: 7, description: "fix toilet", creator: "roman", date: Date.now(), status: 1 },
-    { id: 8, description: "fix toilet", creator: "roman", date: Date.now(), status: 1 },
-  ]
-
   insertRow(e: any) {
     e.data.status = 1;
-    e.data.date = Date.now();;
+    e.data.date = Date.now();
   }
 
   onRowInserted(e: any) {
+    console.log("Date(new): ", e.data.date);
     let obj = {
       id: 0,
       description: e.data.description,
       creator: e.data.creator,
-      date: e.data.date,
+      date: Number.isInteger(e.data.date) ? e.data.date : Date.parse(e.data.date),
       status: e.data.status
     };
-    this.http.post("http://localhost:8080/addMal", obj).subscribe(res => {
-      console.log("backFrom sql: ", res);
-      this.dataGrid.instance.refresh()
+
+    this.http.post("http://localhost:8083/addMal", obj).subscribe(res => {
+      //console.log("backFrom sql: ", res);
+      if (res == "Added") {
+        notify("Malfunction added", 'success', 3000);
+        this.getData();
+      }
+    }, err => {
+      notify("Error, Failed to add Malfunction", 'error', 3000);
     });
   }
   onRowRemoved(e: any) {
-    console.log("delete id: ", e.data.id);
-  } 
+    this.http.delete("http://localhost:8083/delMal/" + e.data.id).subscribe(res => {
+      if (res == "Removed") {
+        this.dataGrid.instance.refresh()
+        notify("Malfunction was removed", 'success', 3000);
+      }
+    }, err => {
+      notify("Error, cannot remove Malfunction", 'error', 3000);
+    })
+  }
 
 
   RowUpdated(e: any) {
-    if (e.data.status == 3) {
-      let obj = this.new.find((obj: any) => obj.id === e.data.id);
-      this.completed.push(obj);
-      this.new = this.new.filter(item => item.id !== e.data.id);
-    }
+    console.log("Date(update): ", e.data.date);
+    let obj = {
+      id: e.data.id,
+      description: e.data.description,
+      creator: e.data.creator,
+      date: Number.isInteger(e.data.date) ? e.data.date : Date.parse(e.data.date),
+      status: e.data.status
+    };
+
+    //console.log("Sent after edit: ", obj);
+    this.http.post("http://localhost:8083/editMal", obj).subscribe(res => {
+      if (res == "Edited") {
+        notify("Malfunction was edited", 'success', 3000);
+        this.getData();
+      }
+    }, err => {
+      notify("Error, cannot edit Malfunction", 'error', 3000);
+    });
+
+
   }
   onRowPrepared(e: any) {
     if (e.rowType === "data") {
@@ -101,9 +109,29 @@ export class AppComponent {
     }
 
   }
-  GetMals() {
-    this.http.get("http://localhost:8080/getList").subscribe(res => {
-      console.log("Result: ", res);
+  //orgTables(e: any) {
+  //  let obj = this.newMalList.find((obj: any) => obj.id === e.data.id);
+  //  this.completed.push(obj);
+  //  this.newMalList = this.newMalList.filter((item: any) => item.id !== e.data.id);
+  //}
+  getData() {
+    this.http.get("http://localhost:8083/getList").subscribe((res: any) => {
+      //console.log("Result: ", res);
+      this.newMalList = [];
+      this.completed = [];
+      res.forEach((data: any) => {
+        //console.log("data: ", data)
+        if (data.status == 3) {
+          this.completed.push(data)
+        }
+        else {
+          this.newMalList.push(data)
+        }
+      });
+
+    }, err => {
+      notify("Error, cannot get malfunction list", 'error', 3000);
     });
   }
+
 }

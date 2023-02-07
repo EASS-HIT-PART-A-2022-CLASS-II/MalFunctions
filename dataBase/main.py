@@ -1,21 +1,13 @@
 import mysql.connector
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from datetime import date
+import json
 
 
-
-
-class MalFunctionDto(BaseModel):
-    id: int
-    description: str
-    creator: str
-    date: date
-    status: int
-
+from models import MalFunction
 
 app = FastAPI()
+
 
 origins = [
     "http://localhost:8081",
@@ -32,7 +24,7 @@ app.add_middleware(
 
 def conn():
     try:
-        cnx = mysql.connector.connect(user='root', password='1542',host='mysql')
+        cnx = mysql.connector.connect(user='root', password='1542',host='mysql_service')
         cursor = cnx.cursor()
         return cursor,cnx
     except Exception as e:
@@ -44,7 +36,7 @@ def conn():
 def createDB():
     cursor,cnx = conn()
     cursor.execute("CREATE DATABASE malfunctions")
-    cnx = mysql.connector.connect(user='root', password='1542',host='mysql',database='malfunctions')
+    cnx = mysql.connector.connect(user='root', password='1542',host='mysql_service',database='malfunctions')
     cursor = cnx.cursor()
     cursor.execute('''
         CREATE TABLE `malfunctions`.`list` (
@@ -91,7 +83,7 @@ def check():
 @app.get("/getList")
 def getList():
     cursor,cnx = conn()
-    cnx = mysql.connector.connect(user='root', password='1542',host='mysql',database='malfunctions')
+    cnx = mysql.connector.connect(user='root', password='1542',host='mysql_service',database='malfunctions')
     cursor = cnx.cursor()
 
     query = 'SELECT * FROM list'
@@ -105,47 +97,57 @@ def getList():
             'date': row[3],
             'status': row[4]
         })
-
+    
     cursor.close()
     cnx.close()
 
     return result
 
 @app.post("/addMal")
-async def addMal(mal: MalFunctionDto):
+async def addMal(mal: MalFunction):
     cursor,cnx = conn()
-    cnx = mysql.connector.connect(user='root', password='1542',host='mysql',database='malfunctions')
+    cnx = mysql.connector.connect(user='root', password='1542',host='mysql_service',database='malfunctions')
     cursor = cnx.cursor()
     cursor.execute(f'''
     INSERT INTO `malfunctions`.`list` (`description`, `created_by`, `date`, `status`) VALUES ('{mal.description}', '{mal.creator}', '{mal.date}', '{mal.status}');
      ''')
     cnx.commit()
-    return mal
+    return "Added"
+
+@app.delete("/delMal/{id}")
+async def delMal(id : int):
+    cursor,cnx = conn()
+    cnx = mysql.connector.connect(user='root', password='1542',host='mysql_service',database='malfunctions')
+    cursor = cnx.cursor()
+    cursor.execute(
+           f'''
+           DELETE FROM list WHERE id = {id}
+           ''' 
+        )
+    cnx.commit()
+    return "Removed"
+
+@app.post("/editMal")
+async def editMal(mal: MalFunction):
+    cursor,cnx = conn()
+    cnx = mysql.connector.connect(user='root', password='1542',host='mysql_service',database='malfunctions')
+    cursor = cnx.cursor()
+    cursor.execute(
+            f'''
+            UPDATE `malfunctions`.`list` SET `description` = '{mal.description}',
+             `created_by` = '{mal.creator}',
+              `date` = '{mal.date}',
+               `status` = '{mal.status}' 
+               WHERE (`id` = '{mal.id}');
+            '''
+        )
+    cnx.commit()
+    return "Edited"
 
 
 
 
 
-
-
-
-
-# @app.get("/ReadData")
-# def ReadData():
-#     cursor,cnx = conn()
-#     query = 'SELECT * FROM sys_config'
-#     cursor.execute(query)
-#     result = []
-# # Print the results
-#     for row in cursor:
-#         print(row)
-#         result.append(str(row))
-
-# #   Close the cursor and connection
-#     cursor.close()
-#     cnx.close()
-
-#     return result
 
 
 

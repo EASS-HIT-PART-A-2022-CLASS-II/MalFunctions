@@ -5,6 +5,12 @@
   font-weight: bold;
 }
 
+
+.dx-datagrid-rowsview .dx-row.dx-edit-row:first-child > td {
+  border-top: 2px solid green;
+  border-bottom: 2px solid green;
+}
+
 .dx-datagrid-borders, .dx-toolbar {
   background-color: #7d7d7d;
 }

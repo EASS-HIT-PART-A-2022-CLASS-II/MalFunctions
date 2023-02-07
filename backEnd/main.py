@@ -1,8 +1,11 @@
 from fastapi import FastAPI
-from models import *
-import os, sys
 import requests
 from fastapi.middleware.cors import CORSMiddleware
+from models import MalFunction
+import json
+
+
+
 
 app = FastAPI()
 
@@ -20,43 +23,35 @@ app.add_middleware(
 
 malfunctions  = []
 
-class BackEnd:
-    @app.get("/test")
-    def hello_post():
-        return "test works!"
-
-    @app.get("/getMalList")
-    def getMalfuntionList():
-        return {"MalFunctions list":malfunctions,"meta_data":len(malfunctions)}
-
-
-    @app.get("/starwars")
-    def get_starwars():
-        r =requests.get('https://xkcd.com/1906/')
-        return r.text
-
 #####all http requests below will call MalFunction Service#####
 
 #http request to get entire malfunctions list
-    @app.get("/getMalFunctionsList")
-    def getMalfuntionList():
-        return "call malfunction service and get back list of all malfunctions"
+@app.get("/check")
+def check():
+    r = requests.get("http://database_service/check")
+    return r.json()
 
+@app.get("/getList")
+def getList():
+    r = requests.get("http://database_service/getList")
+    return r.json()
+    
+@app.post("/addMal")
+def addMal(mal: MalFunction):
+    mal.date = str(mal.date)
+    ss = json.dumps(mal.dict())
+    r = requests.post("http://database_service/addMal", data=ss)
+    return r.json()
 
-    #http request to remove specific malfunction by id
-    @app.post("/removeMalFunction")
-    def removeMalFunction(id:int):
-        return "send id for remove from DB by malfunction service"
+@app.delete("/delMal/{id}")
+def delMal(id : int):
+    r = requests.delete("http://database_service/delMal/" + str(id))
+    return r.json()
 
-
-    #http request to update specific malfunction object with specific id will send and change in DB
-    @app.post("/updateMalFunction")
-    def updateMalFunction(updatedMalFunction: MalFunctionDto):
-        return "send updated malfunction to malfunction service for update"
-
-
-    #http request to add new malfunction to DB
-    @app.post("/addMalFunction")
-    def addMalFunction(newMalFunction: MalFunctionDto):
-        return "send new dto for register in DB"
+@app.post("/editMal")
+def editMal(mal: MalFunction):
+    mal.date = str(mal.date)
+    ss = json.dumps(mal.dict())
+    r = requests.post("http://database_service/editMal", data=ss)
+    return r.json()
 
