@@ -4,29 +4,26 @@ version: "3.9"
 services:
   mysql_service:
     image: mysql
-    container_name: mysql_container
     environment:
       MYSQL_ROOT_PASSWORD: 1542
     ports:
       - 3305:3306
   database_service:
-    image: dbservice
-    container_name: db_container
+    build:
+      context: ./dataBase
     ports:
       - 8080:80  
 
   front_service:
-    image: frontend
-    container_name: frontend_container
+    build:
+      context: ./Angular/frontend
     ports:
       - 8081:80 
 
   backend_service:
-    image: backend
-    container_name: backend_container
+    build:
+      context: ./backEnd
     ports:
       - 8083:80 
-
-
 
     restart: unless-stopped
