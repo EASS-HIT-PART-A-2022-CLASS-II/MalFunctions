@@ -8,8 +8,16 @@ git clone https://github.com/EASS-HIT-PART-A-2022-CLASS-II/MalFunctions.git
 ```
 
 Then, navigate to MalFunction main folder and run the next command (it can take up to 30 min on first build) 
+
+For first time:
+
 ```
 docker-compose up --build
+```
+else :
+
+```
+docker-compose up
 ```
 
 <b>Ensure the MySQL server is up and ready for use:</b>
