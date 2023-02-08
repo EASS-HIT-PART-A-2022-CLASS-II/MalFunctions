@@ -28,7 +28,7 @@ Use the link below or open your browser and navigate to `localhost:8081`
 
 <a href="http://www.localhost:8081">Open Web</a>
 
-There is a short video of how to use the app (MP4 file)
+There is a short video of how to use the app (MP4 file) in the folder, so you can view how it should work.
 
 ## App screenshot
 <img src="https://i.ibb.co/S0hKfb4/App.png" style="width:70%">
