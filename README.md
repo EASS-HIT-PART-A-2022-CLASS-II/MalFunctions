@@ -24,5 +24,6 @@ There is a short video of how to use the app (MP4 file)
 
 ## App screenshot
 <img src="https://i.ibb.co/S0hKfb4/App.png" style="width:70%">
+
 ## Project Schema
 <img src="https://i.ibb.co/bJfnKc1/schema.png" style="width:70%">
